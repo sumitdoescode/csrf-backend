@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { setCookie, getCookie } from "hono/cookie";
+import { setCookie, getCookie, deleteCookie } from "hono/cookie";
 import { sign, verify } from "jsonwebtoken";
 
 const app = new Hono();
@@ -33,6 +33,11 @@ app.post("/login", async (c) => {
         maxAge: 24 * 60 * 60,
     });
     return c.json({ ok: true, message: "Successfully logged in" }, 200);
+});
+
+app.get("/logout", (c) => {
+    deleteCookie(c, "token");
+    return c.json({ ok: true, message: "Successfully logged out" }, 200);
 });
 
 app.get("/dashboard", (c) => {
