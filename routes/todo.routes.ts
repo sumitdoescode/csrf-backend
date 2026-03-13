@@ -9,7 +9,21 @@ const todoRoutes = new Hono();
 todoRoutes.post("/", authMiddleware, async (c: Context) => {
     try {
         console.log("coming inside create todo");
-        const { title, description } = await c.req.json();
+
+        // check if form data is coming
+        let title;
+        let description;
+        if (c.req.method === "POST" && c.req.header("Content-Type")?.includes("application/x-www-form-urlencoded")) {
+            const formData = await c.req.formData();
+            console.log({ formData });
+            title = formData.get("title");
+            description = formData.get("description");
+        } else {
+            const data = await c.req.json();
+            console.log({ data });
+            title = data.title;
+            description = data.description;
+        }
         if (!title || !description) {
             return c.json({ ok: false, message: "All fields are required" }, 400);
         }
