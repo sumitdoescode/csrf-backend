@@ -38,6 +38,7 @@ app.post("/login", async (c) => {
 app.get("/dashboard", (c) => {
     console.log("coming here");
     const cookie = getCookie(c, "token");
+    console.log(cookie);
     if (!cookie) {
         return c.json({ ok: false, message: "Unauthorized" });
     }
