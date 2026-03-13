@@ -36,7 +36,11 @@ app.post("/login", async (c) => {
 });
 
 app.get("/logout", (c) => {
-    deleteCookie(c, "token");
+    deleteCookie(c, "token", {
+        path: "/",
+        secure: true,
+        sameSite: "none",
+    });
     return c.json({ ok: true, message: "Successfully logged out" }, 200);
 });
 
