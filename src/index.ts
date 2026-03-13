@@ -17,7 +17,7 @@ app.use(
 );
 
 app.get("/", (c) => {
-    return c.json({ ok: true, message: "Welcome !" });
+    return c.json({ ok: true, message: "Welcome !" }, 200);
 });
 
 app.post("/login", async (c) => {
@@ -32,24 +32,23 @@ app.post("/login", async (c) => {
         sameSite: "lax",
         maxAge: 24 * 60 * 60,
     });
-    return c.json({ ok: true, message: "Successfully logged in" });
+    return c.json({ ok: true, message: "Successfully logged in" }, 200);
 });
 
 app.get("/dashboard", (c) => {
-    console.log("coming inside dashboard");
     const cookie = getCookie(c, "token");
-    console.log(cookie);
+    console.log({ cookie });
     if (!cookie) {
-        return c.json({ ok: false, message: "Unauthorized" });
+        return c.json({ ok: false, message: "Unauthorized" }, 401);
     }
     let decoded;
     try {
         decoded = verify(cookie, process.env.JWT_SECRET!);
     } catch (error) {
-        return c.json({ ok: false, message: "Invalid token or expired" });
+        return c.json({ ok: false, message: "Invalid token or expired" }, 401);
     }
     console.log(decoded);
-    return c.json({ ok: true, message: "Dashboard page", user: decoded });
+    return c.json({ ok: true, message: "Dashboard page", user: decoded }, 200);
 });
 
 export default app;
