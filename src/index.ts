@@ -10,7 +10,7 @@ app.use(logger());
 
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL!,
+        origin: "https://csrf-frontend.vercel.app",
         allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
     }),
