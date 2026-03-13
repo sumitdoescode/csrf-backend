@@ -4,6 +4,7 @@ import { logger } from "hono/logger";
 import userRoutes from "./routes/user.routes";
 import healthcheckRoutes from "./routes/healthcheck.routes";
 import { connectDB } from "./db/db";
+import todoRoutes from "./routes/todo.routes";
 
 connectDB();
 
@@ -21,5 +22,6 @@ app.use(
 
 app.route("/api/healthcheck", healthcheckRoutes);
 app.route("/api/users", userRoutes);
+app.route("/api/todos", todoRoutes);
 
 export default app;
