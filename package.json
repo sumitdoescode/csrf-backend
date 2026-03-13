@@ -1,8 +1,8 @@
 {
     "name": "csrf-backend",
     "scripts": {
-        "dev": "bun run --env-file .env --hot src/index.ts",
-        "start": "bun run --env-file .env src/index.ts"
+        "dev": "bun run --env-file .env --hot index.ts",
+        "start": "bun run --env-file .env index.ts"
     },
     "dependencies": {
         "@types/jsonwebtoken": "^9.0.10",
