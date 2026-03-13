@@ -46,7 +46,7 @@ userRoutes.post("/login", async (c) => {
         setCookie(c, "token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "none",
+            sameSite: "lax",
             maxAge: 24 * 60 * 60, // 24 hours in seconds
         });
         return c.json({ ok: true, message: "User logged in successfully", user }, 200);
@@ -66,7 +66,7 @@ userRoutes.get("/logout", authMiddleware, (c: Context) => {
         deleteCookie(c, "token", {
             path: "/",
             secure: true,
-            sameSite: "none",
+            sameSite: "lax",
         });
         return c.json({ ok: true, message: `${user.email} is logged out successfully` }, 200);
     } catch (error) {
