@@ -20,6 +20,6 @@ app.use(
 );
 
 app.route("/api/healthcheck", healthcheckRoutes);
-app.route("/api/user", userRoutes);
+app.route("/api/users", userRoutes);
 
 export default app;
