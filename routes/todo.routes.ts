@@ -5,7 +5,7 @@ import type { Context } from "hono";
 
 const todoRoutes = new Hono();
 
-// POST => /api/todo/create
+// POST => /api/todos
 todoRoutes.post("/", authMiddleware, async (c: Context) => {
     try {
         console.log("coming inside create todo");
