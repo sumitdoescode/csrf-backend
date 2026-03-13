@@ -29,7 +29,7 @@ app.post("/login", async (c) => {
     setCookie(c, "token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
+        sameSite: "none",
         maxAge: 24 * 60 * 60,
     });
     return c.json({ ok: true, message: "Successfully logged in" }, 200);
