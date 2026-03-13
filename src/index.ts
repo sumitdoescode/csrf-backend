@@ -8,6 +8,8 @@ const app = new Hono();
 
 app.use(logger());
 
+let subscribers = [];
+
 app.use(
     cors({
         origin: "https://csrf-frontend.vercel.app",
@@ -33,6 +35,12 @@ app.post("/login", async (c) => {
         maxAge: 24 * 60 * 60,
     });
     return c.json({ ok: true, message: "Successfully logged in" }, 200);
+});
+
+app.post("/subscribe", async (c) => {
+    const { to } = await c.req.json();
+    subscribers.push(to);
+    return c.json({ ok: true, message: "Subscribed", subscribers }, 200);
 });
 
 app.get("/logout", (c) => {
