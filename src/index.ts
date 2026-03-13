@@ -1,14 +1,15 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { setCookie, getCookie, deleteCookie } from "hono/cookie";
-import { sign, verify } from "jsonwebtoken";
+import userRoutes from "./routes/user.routes";
+import healthcheckRoutes from "./routes/healthcheck.routes";
+import { connectDB } from "./db/db";
+
+connectDB();
 
 const app = new Hono();
 
 app.use(logger());
-
-let subscribers = [];
 
 app.use(
     cors({
@@ -18,54 +19,7 @@ app.use(
     }),
 );
 
-app.get("/", (c) => {
-    return c.json({ ok: true, message: "Welcome !" }, 200);
-});
-
-app.post("/login", async (c) => {
-    const body = await c.req.json();
-    console.log(body);
-    const token = sign(body, process.env.JWT_SECRET!, {
-        expiresIn: "24h",
-    });
-    setCookie(c, "token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 24 * 60 * 60,
-    });
-    return c.json({ ok: true, message: "Successfully logged in" }, 200);
-});
-
-app.post("/subscribe", async (c) => {
-    const { to } = await c.req.json();
-    subscribers.push(to);
-    return c.json({ ok: true, message: "Subscribed", subscribers }, 200);
-});
-
-app.get("/logout", (c) => {
-    deleteCookie(c, "token", {
-        path: "/",
-        secure: true,
-        sameSite: "none",
-    });
-    return c.json({ ok: true, message: "Successfully logged out" }, 200);
-});
-
-app.get("/dashboard", (c) => {
-    const cookie = getCookie(c, "token");
-    console.log({ cookie });
-    if (!cookie) {
-        return c.json({ ok: false, message: "Unauthorized" }, 401);
-    }
-    let decoded;
-    try {
-        decoded = verify(cookie, process.env.JWT_SECRET!);
-    } catch (error) {
-        return c.json({ ok: false, message: "Invalid token or expired" }, 401);
-    }
-    console.log(decoded);
-    return c.json({ ok: true, message: "Dashboard page", user: decoded }, 200);
-});
+app.route("/api/healthcheck", healthcheckRoutes);
+app.route("/api/user", userRoutes);
 
 export default app;
