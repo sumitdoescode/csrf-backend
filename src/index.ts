@@ -36,7 +36,7 @@ app.post("/login", async (c) => {
 });
 
 app.get("/dashboard", (c) => {
-    console.log("coming here");
+    console.log("coming inside dashboard");
     const cookie = getCookie(c, "token");
     console.log(cookie);
     if (!cookie) {
