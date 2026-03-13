@@ -14,7 +14,7 @@ app.use(logger());
 
 app.use(
     cors({
-        origin: "https://csrf-frontend.sumitdoescode.me/",
+        origin: "https://csrf-frontend.sumitdoescode.me",
         allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
     }),
