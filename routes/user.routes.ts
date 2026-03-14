@@ -7,7 +7,7 @@ import type { Context } from "hono";
 
 const userRoutes = new Hono();
 
-// POST => /api/user/register
+// POST => /api/users/register
 userRoutes.post("/register", async (c) => {
     try {
         const { name, email, password } = await c.req.json();
@@ -27,7 +27,7 @@ userRoutes.post("/register", async (c) => {
     }
 });
 
-// POST => /api/user/login
+// POST => /api/users/login
 userRoutes.post("/login", async (c) => {
     try {
         const { email, password } = await c.req.json();
@@ -46,7 +46,7 @@ userRoutes.post("/login", async (c) => {
         setCookie(c, "token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "lax",
+            sameSite: "none",
             maxAge: 24 * 60 * 60, // 24 hours in seconds
         });
         return c.json({ ok: true, message: "User logged in successfully", user }, 200);
@@ -56,8 +56,8 @@ userRoutes.post("/login", async (c) => {
     }
 });
 
-// GET => /api/user/logout
-userRoutes.get("/logout", authMiddleware, (c: Context) => {
+// POST => /api/users/logout
+userRoutes.post("/logout", authMiddleware, (c: Context) => {
     try {
         const user = c.get("user");
         if (!user) {
@@ -66,7 +66,7 @@ userRoutes.get("/logout", authMiddleware, (c: Context) => {
         deleteCookie(c, "token", {
             path: "/",
             secure: true,
-            sameSite: "lax",
+            sameSite: "none",
         });
         return c.json({ ok: true, message: `${user.email} is logged out successfully` }, 200);
     } catch (error) {
@@ -75,7 +75,7 @@ userRoutes.get("/logout", authMiddleware, (c: Context) => {
     }
 });
 
-// GET => /api/user/me
+// GET => /api/users/me
 userRoutes.get("/me", authMiddleware, async (c: Context) => {
     try {
         const user = c.get("user");
